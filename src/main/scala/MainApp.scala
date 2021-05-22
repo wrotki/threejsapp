@@ -1,5 +1,7 @@
 import org.scalajs.dom
-import dom.{ document, window }
+import dom.{console, document, window}
+
+import threejs.Scene
 
 object MainApp {
   def main(args: Array[String]): Unit = {
@@ -11,6 +13,10 @@ object MainAppImpl  {
 
   def main(): Unit = {
     println("Starting 'threejsapp'...")
+
+    val scene = new Scene
+    //    js.Dynamic.global.scene = scene
+    console.log(s"Scene: $scene")
 
     val p = document.createElement("p")
     val text = document.createTextNode("Hello!")
