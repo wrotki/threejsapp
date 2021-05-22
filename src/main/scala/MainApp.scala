@@ -1,9 +1,13 @@
-import scala.scalajs.js.JSApp
-
 import org.scalajs.dom
 import dom.{ document, window }
 
-object MainApp extends JSApp {
+object MainApp {
+  def main(args: Array[String]): Unit = {
+    MainAppImpl.main
+  }
+}
+
+object MainAppImpl  {
 
   def main(): Unit = {
     println("Starting 'threejsapp'...")
