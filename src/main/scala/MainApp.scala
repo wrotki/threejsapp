@@ -1,7 +1,9 @@
 import scala.scalajs.js
 import org.scalajs.dom
 import dom.{console, document, window}
+import threejs.{Color, MeshBasicMaterial, MeshBasicMaterialParameters}
 
+import scala.scalajs.js.JSON
 import scala.scalajs.js.annotation.JSExportTopLevel
 
 object MainApp {
@@ -34,11 +36,15 @@ object MainAppImpl  {
     scene.add(cube)
 
     val cube2 = objects3d.Cube()
-    cube2.position.x = -2
-    scene.add(cube2)
     Globals.cube = cube2
+    println(JSON.stringify(cube2.material))
+    cube2.position.x = -2
+    cube2.material.color = new Color("#1f6f2f")
+    scene.add(cube2)
+
     val cube3 = objects3d.Cube()
     cube3.position.x = 2
+    cube3.material.color = new Color("#6f1010")
     scene.add(cube3)
 
     lazy val render: (Double) => _ = (_: Double) => {
