@@ -1,7 +1,7 @@
 import scala.scalajs.js
 import org.scalajs.dom
 import dom.{console, document, window}
-import threejs.{Color, MeshBasicMaterial, MeshBasicMaterialParameters}
+import threejs.{Color, DirectionalLight, MeshBasicMaterial, MeshBasicMaterialParameters, MeshStandardMaterial}
 
 import scala.scalajs.js.JSON
 import scala.scalajs.js.annotation.JSExportTopLevel
@@ -22,15 +22,18 @@ object MainAppImpl  {
   def main(): Unit = {
     println("Starting 'threejsapp'...")
 
-    val scene = new threejs.Scene
-
     val camera = new threejs.PerspectiveCamera(75f, (window.innerWidth/window.innerHeight).toFloat, 0.1f, 1000f)
-    camera.position.z = 12
+    camera.position.z = 5
 
     val renderer = new threejs.WebGLRenderer(threejs.WebGLRendererParameters(antialias = true))
-    renderer.setClearColor("#00ff00", 1.0f)
+    renderer.setClearColor("#111111", 1.0f)
     renderer.setSize( window.innerWidth.toFloat, window.innerHeight.toFloat)
     document.body.appendChild( renderer.domElement )
+
+    val scene = new threejs.Scene
+
+    val light = new DirectionalLight(0xffffff, 1.0f)
+    scene.add(light)
 
     val cube = objects3d.Cube()
     scene.add(cube)
@@ -39,12 +42,12 @@ object MainAppImpl  {
     Globals.cube = cube2
     println(JSON.stringify(cube2.material))
     cube2.position.x = -2
-    cube2.material.color = new Color("#1f6f2f")
+    cube2.material.asInstanceOf[MeshStandardMaterial].color = new Color("#1f6f2f")
     scene.add(cube2)
 
     val cube3 = objects3d.Cube()
     cube3.position.x = 2
-    cube3.material.color = new Color("#6f1010")
+    cube3.material.asInstanceOf[MeshStandardMaterial].color = new Color("#6f1010")
     scene.add(cube3)
 
     lazy val render: (Double) => _ = (_: Double) => {
