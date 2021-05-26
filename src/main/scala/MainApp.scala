@@ -32,9 +32,6 @@ object MainAppImpl  {
 
     val scene = new threejs.Scene
 
-    val light = new DirectionalLight(0xffffff, 1.0f)
-    scene.add(light)
-
     val cube = objects3d.Cube()
     scene.add(cube)
 
@@ -49,6 +46,19 @@ object MainAppImpl  {
     cube3.position.x = 2
     cube3.material.asInstanceOf[MeshStandardMaterial].color = new Color("#6f1010")
     scene.add(cube3)
+
+    val light = new DirectionalLight(0xffffff, 2.0f)
+    light.position.x = -2
+    light.position.y = 2
+    light.position.z = -1
+    light.target = cube3
+    scene.add(light)
+    val light2 = new DirectionalLight(0xffffff, 2.0f)
+    light2.position.x = 2
+    light2.position.y = -2
+    light2.position.z = 1
+    light2.target = cube
+    scene.add(light2)
 
     lazy val render: (Double) => _ = (_: Double) => {
       window.requestAnimationFrame( render )
