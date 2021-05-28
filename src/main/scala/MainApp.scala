@@ -3,7 +3,7 @@ import org.scalajs.dom
 import dom.{console, document, window}
 import threejs.{Color, DirectionalLight, MeshBasicMaterial, MeshBasicMaterialParameters, MeshStandardMaterial}
 
-import scala.scalajs.js.JSON
+import scala.scalajs.js.{Date, JSON}
 import scala.scalajs.js.annotation.JSExportTopLevel
 
 object MainApp {
@@ -33,32 +33,38 @@ object MainAppImpl  {
     val scene = new threejs.Scene
 
     val cube = objects3d.Cube()
-    scene.add(cube)
+    scene.add(cube.mesh)
 
     val cube2 = objects3d.Cube()
-    Globals.cube = cube2
-    println(JSON.stringify(cube2.material))
-    cube2.position.x = -2
-    cube2.material.asInstanceOf[MeshStandardMaterial].color = new Color("#1f6f2f")
-    scene.add(cube2)
+    Globals.cube = cube2.mesh
+    println(JSON.stringify(cube2.mesh.material))
+    cube2.startPosition.x = -2
+    cube2.mesh.material.asInstanceOf[MeshStandardMaterial].color = new Color("#1f6f2f")
+    scene.add(cube2.mesh)
 
     val cube3 = objects3d.Cube()
-    cube3.position.x = 2
-    cube3.material.asInstanceOf[MeshStandardMaterial].color = new Color("#6f1010")
-    scene.add(cube3)
+    cube3.startPosition.x = 2
+    cube3.mesh.material.asInstanceOf[MeshStandardMaterial].color = new Color("#6f1010")
+    scene.add(cube3.mesh)
 
     val light = new DirectionalLight(0xffffff, 2.0f)
-    light.position.x = -2
-    light.position.y = 2
-    light.position.z = -1
-    light.target = cube3
+    light.position.x = -10
+    light.position.y = 5
+    light.position.z = 10
+    light.target = cube3.mesh
     scene.add(light)
     val light2 = new DirectionalLight(0xffffff, 2.0f)
-    light2.position.x = 2
-    light2.position.y = -2
-    light2.position.z = 1
-    light2.target = cube
+    light2.position.x = 10
+    light2.position.y = 5
+    light2.position.z = 10
+    light2.target = cube.mesh
     scene.add(light2)
+    val light3 = new DirectionalLight(0xffffff, 2.0f)
+    light3.position.x = 0
+    light3.position.y = -5
+    light3.position.z = 10
+    light3.target = cube.mesh
+    scene.add(light3)
 
     lazy val render: (Double) => _ = (_: Double) => {
       window.requestAnimationFrame( render )
@@ -69,6 +75,15 @@ object MainAppImpl  {
       cube2.rotation.y = cube2.rotation.y + 0.04f
       cube3.rotation.x = cube3.rotation.x + 0.04f
       cube3.rotation.y = cube3.rotation.y + 0.04f
+
+      val now = Date.now
+      val nowSeconds = now/1000.0
+
+      println(f"System.currentTimeMillis(): ${now}%f")
+      println(f"System.currentTimeMillis() seconds: ${nowSeconds}%f")
+      cube.move(nowSeconds)
+      cube2.move(nowSeconds)
+      cube3.move(nowSeconds)
 
       renderer.render(scene, camera)
     }
