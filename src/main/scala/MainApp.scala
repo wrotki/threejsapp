@@ -38,12 +38,12 @@ object MainAppImpl  {
     val cube2 = objects3d.Cube()
     Globals.cube = cube2.mesh
     println(JSON.stringify(cube2.mesh.material))
-    cube2.startPosition.x = -2
+    cube2.mesh.position.x = -2
     cube2.mesh.material.asInstanceOf[MeshStandardMaterial].color = new Color("#1f6f2f")
     scene.add(cube2.mesh)
 
     val cube3 = objects3d.Cube()
-    cube3.startPosition.x = 2
+    cube3.mesh.position.x = 2
     cube3.mesh.material.asInstanceOf[MeshStandardMaterial].color = new Color("#6f1010")
     scene.add(cube3.mesh)
 
@@ -76,14 +76,9 @@ object MainAppImpl  {
       cube3.rotation.x = cube3.rotation.x + 0.04f
       cube3.rotation.y = cube3.rotation.y + 0.04f
 
-      val now = Date.now
-      val nowSeconds = now/1000.0
-
-      println(f"System.currentTimeMillis(): ${now}%f")
-      println(f"System.currentTimeMillis() seconds: ${nowSeconds}%f")
-      cube.move(nowSeconds)
-      cube2.move(nowSeconds)
-      cube3.move(nowSeconds)
+      cube.update()
+      cube2.update()
+      cube3.update()
 
       renderer.render(scene, camera)
     }
