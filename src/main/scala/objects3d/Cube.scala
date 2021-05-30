@@ -14,7 +14,7 @@ object Cube {
     material.roughness = 0.3f
     material.emissive = new Color("#3f4f3f")
     val ret = new Cube(new Mesh( geometry, material))
-    ret.components = ret.components :+ new MoveInCircleComponent(ret)
+    ret.components = ret.components :+ new MoveInCircleComponent(ret) :+ new RotateComponent(ret)
     ret
   }
 
