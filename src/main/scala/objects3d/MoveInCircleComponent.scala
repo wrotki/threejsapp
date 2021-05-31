@@ -10,8 +10,8 @@ class MoveInCircleComponent(owner: Actor3D) extends Component(owner) with Update
     val oldPosition = owner.mesh.position
     val thisUpdateTime = Date.now/1000.0
     val newPosX = oldPosition.x + 2 * (Math.sin(thisUpdateTime) - Math.sin(lastUpdateTime))
-    val newPosY = oldPosition.y + 2 * (Math.cos(thisUpdateTime) - Math.cos(lastUpdateTime))
-    val newPosZ = oldPosition.z + 2 * (Math.cos(thisUpdateTime) - Math.cos(lastUpdateTime))
+    val newPosY = oldPosition.y + (Math.cos(thisUpdateTime) - Math.cos(lastUpdateTime))
+    val newPosZ = oldPosition.z + (Math.cos(thisUpdateTime) - Math.cos(lastUpdateTime))
 
     owner.mesh.position.x = newPosX.toFloat
     owner.mesh.position.y = newPosY.toFloat
