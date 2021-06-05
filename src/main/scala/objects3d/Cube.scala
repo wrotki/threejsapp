@@ -18,7 +18,7 @@ object Cube {
     val material = new MeshStandardMaterial( threejs.MeshStandardMaterialParameters(color = "#433F81") )
     material.metalness = 0.8f
     material.roughness = 0.3f
-    material.emissive = new Color("#3f4f3f")
+    material.emissive = new Color("#1f4fef")
     val ret = new Cube( geometry, material)
     ret.components = ret.components :+ new MoveInCircleComponent(ret) :+ new RotateComponent(ret)
     ret

@@ -2,7 +2,7 @@ import scala.scalajs.js
 import org.scalajs.dom
 import dom.{console, document, window}
 import objects3d.Cube
-import threejs.{Color, DirectionalLight, MeshBasicMaterial, MeshBasicMaterialParameters, MeshStandardMaterial, Object3D}
+import threejs.{Color, DirectionalLight, GLTF, GLTFLoader, MeshBasicMaterial, MeshBasicMaterialParameters, MeshStandardMaterial, Object3D}
 
 import scala.scalajs.js.{Date, JSON}
 import scala.scalajs.js.annotation.JSExportTopLevel
@@ -24,7 +24,7 @@ object MainAppImpl  {
     println("Starting 'threejsapp'...")
 
     val camera = new threejs.PerspectiveCamera(75f, (window.innerWidth/window.innerHeight).toFloat, 0.1f, 1000f)
-    camera.position.z = 5
+    camera.position.z = 100
 
     val renderer = new threejs.WebGLRenderer(threejs.WebGLRendererParameters(antialias = true))
     renderer.setClearColor("#111111", 1.0f)
@@ -34,19 +34,23 @@ object MainAppImpl  {
     val scene = new threejs.Scene
 
     val cube = Cube()
-//    scene.add(cube.mesh)
+    cube.position.x = -100
+//    cube.position.y = 100
+    scene.add(cube)
 
     val cube2 = Cube()
-//    Globals.cube = cube2
+    Globals.cube = cube2
     println(JSON.stringify(cube2.material))
-    cube2.position.x = -2
+    cube2.position.x = -102
+//    cube2.position.y = 100
     cube2.material.asInstanceOf[MeshStandardMaterial].color = new Color("#1f6f2f")
     scene.add(cube2)
 
     val cube3 = Cube()
-    cube3.position.x = 2
+    cube3.position.x = 102
+//    cube3.position.y = 100
     cube3.material.asInstanceOf[MeshStandardMaterial].color = new Color("#6f1010")
-//    scene.add(cube3.mesh)
+    scene.add(cube3)
 
     val light = new DirectionalLight(0xffffff, 2.0f)
     light.position.x = -10
@@ -67,6 +71,17 @@ object MainAppImpl  {
     light3.target = cube
     scene.add(light3)
 
+    val loader = new GLTFLoader
+    loader.load("3d/missile.glb",
+      (gltf) => {
+        scene.add(gltf.asInstanceOf[GLTF].scene)
+      },
+      (progress) => {} ,
+      (error) => {
+        println(("Error loading GLTF: $error"))
+      }
+    )
+
     lazy val render: (Double) => _ = (_: Double) => {
       window.requestAnimationFrame( render )
 
@@ -78,9 +93,9 @@ object MainAppImpl  {
 //      cube3.rotation.y = cube3.rotation.y + 0.04f
 //      println(s"From main: ${JSON.stringify(cube)}")
 
-//      cube.update()
+      cube.update()
       cube2.update()
-//      cube3.update()
+      cube3.update()
 
       renderer.render(scene, camera)
     }
