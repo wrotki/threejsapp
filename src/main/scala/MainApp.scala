@@ -2,7 +2,10 @@ import scala.scalajs.js
 import org.scalajs.dom
 import dom.{console, document, window}
 import objects3d.Cube
-import threejs.{Color, DirectionalLight, GLTF, GLTFLoader, MeshBasicMaterial, MeshBasicMaterialParameters, MeshStandardMaterial, Object3D}
+import threejs.{Color, DirectionalLight, GLTF, GLTFLoader,
+  MeshBasicMaterial, MeshBasicMaterialParameters, MeshStandardMaterial, Object3D,
+  FlyControls
+}
 
 import scala.scalajs.js.{Date, JSON}
 import scala.scalajs.js.annotation.JSExportTopLevel
@@ -24,30 +27,34 @@ object MainAppImpl  {
     println("Starting 'threejsapp'...")
 
     val camera = new threejs.PerspectiveCamera(75f, (window.innerWidth/window.innerHeight).toFloat, 0.1f, 1000f)
-    camera.position.z = 100
+    camera.position.z = 10
 
     val renderer = new threejs.WebGLRenderer(threejs.WebGLRendererParameters(antialias = true))
     renderer.setClearColor("#111111", 1.0f)
     renderer.setSize( window.innerWidth.toFloat, window.innerHeight.toFloat)
     document.body.appendChild( renderer.domElement )
 
+    val flyControls = new FlyControls(camera, renderer.domElement)
+    flyControls.dragToLook = true
+    flyControls.movementSpeed = 0.1f
+    flyControls.rollSpeed = 0.005f
+
     val scene = new threejs.Scene
 
     val cube = Cube()
-    cube.position.x = -100
+    cube.position.x = -10
 //    cube.position.y = 100
     scene.add(cube)
 
     val cube2 = Cube()
-    Globals.cube = cube2
     println(JSON.stringify(cube2.material))
-    cube2.position.x = -102
+    cube2.position.x = 10
 //    cube2.position.y = 100
     cube2.material.asInstanceOf[MeshStandardMaterial].color = new Color("#1f6f2f")
     scene.add(cube2)
 
     val cube3 = Cube()
-    cube3.position.x = 102
+    cube3.position.y = 5
 //    cube3.position.y = 100
     cube3.material.asInstanceOf[MeshStandardMaterial].color = new Color("#6f1010")
     scene.add(cube3)
@@ -75,12 +82,15 @@ object MainAppImpl  {
     loader.load("3d/missile.glb",
       (gltf) => {
         scene.add(gltf.asInstanceOf[GLTF].scene)
+        Globals.cube = gltf.asInstanceOf[GLTF].scene
       },
       (progress) => {} ,
       (error) => {
         println(("Error loading GLTF: $error"))
       }
     )
+
+    val lt = System.currentTimeMillis()
 
     lazy val render: (Double) => _ = (_: Double) => {
       window.requestAnimationFrame( render )
@@ -97,6 +107,11 @@ object MainAppImpl  {
       cube2.update()
       cube3.update()
 
+      val now = System.currentTimeMillis()
+
+      val secs = (now - lt) / 1000
+
+      flyControls.update(1 * secs)
       renderer.render(scene, camera)
     }
 
