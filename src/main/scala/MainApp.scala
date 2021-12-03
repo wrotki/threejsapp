@@ -36,46 +36,30 @@ object MainAppImpl  {
 
     val flyControls = new FlyControls(camera, renderer.domElement)
     flyControls.dragToLook = true
-    flyControls.movementSpeed = 0.1f
-    flyControls.rollSpeed = 0.005f
+    flyControls.movementSpeed = 0.01f
+    flyControls.rollSpeed = 0.001f
 
     val scene = new threejs.Scene
 
-    val cube = Cube()
-    cube.position.x = -10
-//    cube.position.y = 100
+    val cube = Cube(-5, 0, 0)
     scene.add(cube)
 
-    val cube2 = Cube()
+    val cube2 = Cube(5, 0, 0)
     println(JSON.stringify(cube2.material))
-    cube2.position.x = 10
-//    cube2.position.y = 100
     cube2.material.asInstanceOf[MeshStandardMaterial].color = new Color("#1f6f2f")
     scene.add(cube2)
 
-    val cube3 = Cube()
-    cube3.position.y = 5
-//    cube3.position.y = 100
+    val cube3 = Cube(0, 5, 0)
     cube3.material.asInstanceOf[MeshStandardMaterial].color = new Color("#6f1010")
     scene.add(cube3)
 
-    val light = new DirectionalLight(0xffffff, 2.0f)
-    light.position.x = -10
-    light.position.y = 5
-    light.position.z = 10
-    light.target = cube3
+    val light = DirectionalLight(0xffffff, 2.0f, cube3, -10, 5, 10)
     scene.add(light)
-    val light2 = new DirectionalLight(0xffffff, 2.0f)
-    light2.position.x = 10
-    light2.position.y = 5
-    light2.position.z = 10
-    light2.target = cube
+
+    val light2 = DirectionalLight(0xffffff, 2.0f, cube, 0, -5, 10)
     scene.add(light2)
-    val light3 = new DirectionalLight(0xffffff, 2.0f)
-    light3.position.x = 0
-    light3.position.y = -5
-    light3.position.z = 10
-    light3.target = cube
+
+    val light3 = DirectionalLight(0xffffff, 2.0f, cube, 0, -5, 10)
     scene.add(light3)
 
     val loader = new GLTFLoader

@@ -24,4 +24,11 @@ object Cube {
     ret
   }
 
+  def apply(x: Float, y: Float, z: Float): Cube = {
+    val ret = Cube()
+    ret.position.x = x
+    ret.position.y = y
+    ret.position.z = z
+    ret
+  }
 }
