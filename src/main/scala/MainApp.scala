@@ -2,10 +2,9 @@ import scala.scalajs.js
 import org.scalajs.dom
 import dom.{console, document, window}
 import objects3d.Cube
-import threejs.{Color, DirectionalLight, GLTF, GLTFLoader,
-  MeshBasicMaterial, MeshBasicMaterialParameters, MeshStandardMaterial, Object3D,
-  FlyControls
-}
+import org.scalajs.dom.raw.HTMLElement
+import threejs.{Color, DirectionalLight, FlyControls, GLTF, GLTFLoader, MeshBasicMaterial, MeshBasicMaterialParameters, MeshStandardMaterial, Object3D}
+import widgets.charts.Chart
 
 import scala.scalajs.js.{Date, JSON}
 import scala.scalajs.js.annotation.JSExportTopLevel
@@ -38,33 +37,72 @@ object MainAppImpl  {
     flyControls.dragToLook = true
     flyControls.movementSpeed = 0.01f
     flyControls.rollSpeed = 0.001f
+    //    Look down for flycontrols.update call
+
+    val htmlElement = document
+    htmlElement.onkeydown = {(e: dom.KeyboardEvent) =>
+//      println(s"addChartBlock: x: $x y: $y value: ${chartValue}")
+      println(s"onkeydown: ${e.keyCode.toInt}")
+      if( e.keyCode.toInt == 48  ) { // '0'
+//        camera.position.x = 0
+//        camera.position.y = 0
+        camera.translateZ(-5)
+      }
+      if( e.keyCode.toInt == 57  ) { // '9'
+//        camera.position.x = 0
+//        camera.position.y = 0
+        camera.translateX(-camera.position.x) // Back to 0
+        camera.translateY(-camera.position.y) // Back to 0
+        camera.translateZ(-camera.position.z) // Back to 0
+      }
+    }
 
     val scene = new threejs.Scene
 
-    val cube = Cube(-5, 0, 0)
+    val cube = Cube(-5, 0, -500)
     scene.add(cube)
 
-    val cube2 = Cube(5, 0, 0)
+    val cube2 = Cube(5, 0, -500)
     println(JSON.stringify(cube2.material))
     cube2.material.asInstanceOf[MeshStandardMaterial].color = new Color("#1f6f2f")
     scene.add(cube2)
 
-    val cube3 = Cube(0, 5, 0)
+    val cube3 = Cube(0, 5, -500)
     cube3.material.asInstanceOf[MeshStandardMaterial].color = new Color("#6f1010")
     scene.add(cube3)
 
-    val light = DirectionalLight(0xffffff, 2.0f, cube3, -10, 5, 10)
+    val chart = Chart(2, 2, 0, 0, -5)
+    scene.add(chart)
+//    var data: Array[Array[Int]] = Array.ofDim(2, 8)
+//    data(0)(0) = 1
+//    data(0)(1) = 2
+//    data(0)(2) = 4
+//    data(0)(3) = 8
+//    data(0)(4) = 16
+//    data(0)(5) = 32
+//    data(0)(6) = 64
+//    data(0)(7) = 128
+    var data: Array[Array[Int]] = prepareData()
+    chart.setData(data)
+
+    // Lights
+    val light = DirectionalLight(0xffffff, 2.0f, cube, 0, 0, -1000)
     scene.add(light)
 
-    val light2 = DirectionalLight(0xffffff, 2.0f, cube, 0, -5, 10)
+    val light2 = DirectionalLight(0xffffff, 2.0f, chart, 0, 0, 1000)
     scene.add(light2)
 
-    val light3 = DirectionalLight(0xffffff, 2.0f, cube, 0, -5, 10)
+    val light3 = DirectionalLight(0xffffff, 2.0f, chart, -1000, 0, 1000)
     scene.add(light3)
+
+    val light4 = DirectionalLight(0xffffff, 2.0f, chart, 1000, 0, 1000)
+    scene.add(light4)
+
 
     val loader = new GLTFLoader
     loader.load("3d/missile.glb",
       (gltf) => {
+        gltf.asInstanceOf[GLTF].scene.position.z = gltf.asInstanceOf[GLTF].scene.position.z - 500
         scene.add(gltf.asInstanceOf[GLTF].scene)
         Globals.cube = gltf.asInstanceOf[GLTF].scene
       },
@@ -105,5 +143,17 @@ object MainAppImpl  {
     document.body.appendChild(p)
 
     render(0.1)
+  }
+
+  private def prepareData(): Array[Array[Int]] = {
+    val dataSize = 16
+    var data: Array[Array[Int]] = Array.ofDim(dataSize, dataSize)
+    for(x <- data.indices)
+      for(y <- data(x).indices) {
+        val v = Math.pow(x - dataSize/2, 2) + Math.pow(y - dataSize/2, 2)
+        println(s"value: x: $x y: $y v: $v")
+        data(x)(y) = (10.0 * Math.exp(-v)).toInt
+      }
+    data
   }
 }

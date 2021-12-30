@@ -19,7 +19,7 @@ object Cube {
     material.metalness = 0.8f
     material.roughness = 0.3f
     material.emissive = new Color("#1f4fef")
-    val ret = new Cube( geometry, material)
+    val ret = new Cube(geometry, material)
     ret.components = ret.components :+ new MoveInCircleComponent(ret) :+ new RotateComponent(ret)
     ret
   }

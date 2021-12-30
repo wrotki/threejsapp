@@ -11,6 +11,7 @@ lazy val root = project
     libraryDependencies ++= Seq(
       "org.scala-js"  %%% "scalajs-dom"    % "1.1.0",
       "com.otherbrane" %%% "threejsfacade" % "0.1-SNAPSHOT" ,
+      "com.otherbrane" %%% "threejswidgets" % "0.1-SNAPSHOT" ,
       "org.scalatest" %%% "scalatest"      % "3.2.7"    % "test"
     ),
     scalaJSUseMainModuleInitializer := true
