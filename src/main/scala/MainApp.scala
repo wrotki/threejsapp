@@ -18,6 +18,8 @@ object MainApp {
 object Globals {
   @JSExportTopLevel("cube")
   var cube: js.Object = null
+  @JSExportTopLevel("chart")
+  var chart: js.Object = null
 }
 
 object MainAppImpl  {
@@ -75,6 +77,7 @@ object MainAppImpl  {
     scene.add(cube3)
 
     val chart = Chart(2, 2, 0, 0, -5)
+    Globals.chart = chart
     scene.add(chart)
     val data = prepareData()
     chart.setData(data)
