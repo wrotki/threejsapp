@@ -76,11 +76,16 @@ object MainAppImpl  {
     cube3.material.asInstanceOf[MeshStandardMaterial].color = new Color("#6f1010")
     scene.add(cube3)
 
-    val chart = Chart(2, 2, 0, 0, -5)
-    Globals.chart = chart
-    scene.add(chart)
     val data = prepareData()
-    chart.setData(data)
+
+    val cnum = 2
+    for( x <- 0 until cnum) {
+      for ( z <- 0 until cnum) {
+        val chartInst = Chart(2, 2, (x - cnum/2) * 50, 0, -150 - (z - cnum/2) * 50)
+        scene.add(chartInst)
+        chartInst.setData(data)
+      }
+    }
 
     // Lights
     val light = DirectionalLight(0xffffff, 2.0f, cube, 0, 0, -1000)
