@@ -9,6 +9,7 @@ class AppScene()  {
 object AppScene {
 
   val scene = new threejs.Scene
+  println(s"$scene")
   val renderer = new threejs.WebGLRenderer(threejs.WebGLRendererParameters(antialias = true))
   val camera = new threejs.PerspectiveCamera(75f, (window.innerWidth/window.innerHeight).toFloat, 0.1f, 1000f)
   val flyControls = new FlyControls(camera, renderer.domElement)

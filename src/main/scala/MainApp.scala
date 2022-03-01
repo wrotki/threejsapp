@@ -78,7 +78,7 @@ object MainAppImpl  {
 
     val data = prepareData()
 
-    val cnum = 2
+    val cnum = 1
     for( x <- 0 until cnum) {
       for ( z <- 0 until cnum) {
         val chartInst = Chart(2, 2, (x - cnum/2) * 50, 0, -150 - (z - cnum/2) * 50)
@@ -147,7 +147,7 @@ object MainAppImpl  {
   }
 
   private def prepareData(): Array[Array[Float]] = {
-    val dataSize = 32
+    val dataSize = 16
     var data: Array[Array[Float]] = Array.ofDim(dataSize, dataSize)
     for(x <- data.indices)
       for(y <- data(x).indices) {

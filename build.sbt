@@ -1,6 +1,7 @@
 lazy val root = project
   .in(file("."))
   .enablePlugins(ScalaJSPlugin)
+  .enablePlugins(ScalaJSBundlerPlugin)
   .settings(
     inThisBuild(List(
       organization := "com.otherbrane",
@@ -14,17 +15,20 @@ lazy val root = project
       "com.otherbrane" %%% "threejswidgets" % "0.1-SNAPSHOT" ,
       "org.scalatest" %%% "scalatest"      % "3.2.7"    % "test"
     ),
+    Compile/npmDependencies ++= Seq(
+      "three" -> "0.137.5"
+    ),
     scalaJSUseMainModuleInitializer := true
   )
 
 
 // Automatically generate index-dev.html which uses *-fastopt.js
-resourceGenerators in Compile += Def.task {
-  val source = (resourceDirectory in Compile).value / "index.html"
-  val target = (resourceManaged in Compile).value / "index-dev.html"
+  Compile/resourceGenerators += Def.task {
+  val source = (Compile/resourceDirectory).value / "index.html"
+  val target = (Compile/resourceManaged).value / "index-dev.html"
 
-  val fullFileName = (artifactPath in (Compile, fullOptJS)).value.getName
-  val fastFileName = (artifactPath in (Compile, fastOptJS)).value.getName
+  val fullFileName = (Compile/fullOptJS/artifactPath).value.getName
+  val fastFileName = (Compile/fastOptJS/artifactPath).value.getName
 
   IO.writeLines(target,
     IO.readLines(source).map {
