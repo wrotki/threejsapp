@@ -18,6 +18,13 @@ lazy val root = project
     Compile/npmDependencies ++= Seq(
       "three" -> "0.137.5"
     ),
+    Compile/webpack/version := "5.70.0",
+    Compile/webpackCliVersion := "4.9.2",
+    Compile/startWebpackDevServer/version := "4.7.4",
+//    Compile/npmExtraArgs ++= Seq(
+//      "--",
+//      "--openssl-legacy-provider"
+//    ),
     scalaJSUseMainModuleInitializer := true
   )
 
