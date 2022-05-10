@@ -1,6 +1,6 @@
 # threejsapp
 
-[<img src="https://wrotki.github.io/" width="500%" />](https://wrotki.github.io)
+[<img src="https://wrotki.github.io/" width="100%" />](https://wrotki.github.io)
 
 ## Compile
 
