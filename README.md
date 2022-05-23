@@ -95,5 +95,3 @@ Still more
 
 https://jurosh.com/blog/npm-pass-parameters-into-script
 
-Test new public token
------
